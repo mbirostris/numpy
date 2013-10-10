@@ -42,10 +42,12 @@ for i in xrange(0, len(rec)):
 x = np.extract(np.absolute(rec.Teta) < 1.61, rec.Tbeta)
 z = np.extract(rec.Tl1, rec.Tbeta)
 
+
 bin_width = 0.01;
 
-histMC, bins =  np.histogram(x, bins=np.arange(0.,1.,bin_width));
-histL1, bins = np.histogram(z, bins=np.arange(0.,1.,bin_width));
+histMC, bins =  np.histogram(x, bins=np.arange(0.,1.01,bin_width));
+histL1, bins = np.histogram(z, bins=np.arange(0.,1.01,bin_width));
+
 
 po = np.divide(np.array(histL1, dtype=float), np.array(histMC, dtype=float))
 
@@ -63,13 +65,13 @@ plt.ylim([0,max(histMC)]+0.1*max(histMC))
 #ax1.legend()
 
 ax3 = ax2.twinx()
-ax3.plot(np.arange(0.,0.99,bin_width), po, 'o-', color='r', label='Efficiency')
+ax3.plot(np.arange(0.01,1.01,bin_width), po, 'o-', color='r', label='Efficiency')
 ax3.set_ylabel('Efficiency', color='r')
 
 #plt.plot(np.arange(0.,0.99,0.01), po, 'go')
 #plt.bar(bins[:-1], histMC, width=0.01, color='green', alpha=0.5)
 #plt.bar(bins[:-1], histL1, width=0.01, color='blue', alpha=0.5)
-#plt.xlim(min(bins), max(bins))
+plt.xlim([0.3,1.01])
 #plt.ylabel('Probability')
 #plt.xlabel('Probability')
 plt.title(r'Histogram of efficiency versus velocity')

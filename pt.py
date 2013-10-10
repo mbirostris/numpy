@@ -12,6 +12,11 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import host_subplot
 import mpl_toolkits.axisartist as AA
 
+
+PtBins=[0., 0.1,1.5, 2., 2.5, 3., 3.5, 4., 4.5, 5., 6., 7., 8.,10., 12., 14., 16., 18., 20., 25., 30., 35., 40., 45.,50., 60., 70., 80., 90., 100., 120., 140.,160.];
+ 
+PtWidth=[(PtBins[j+1]-PtBins[j]) for j in range(len(PtBins)-1)]  
+
 try:
     os.mkdir("./rysunki/tree/")
 except:
@@ -35,32 +40,38 @@ z = np.extract(rec.Tl1, rec.Tpt)
 
 bin_width = 2;
 
-histMC, bins =  np.histogram(x, bins=np.arange(1,160,bin_width));
-histL1, bins = np.histogram(z, bins=np.arange(1,160,bin_width));
+histMC, bins =  np.histogram(x, bins=PtBins);
+histL1, bins = np.histogram(z, bins=PtBins);
 
 po = np.divide(np.array(histL1, dtype=float), np.array(histMC, dtype=float))
 
 fig, ax1 = plt.subplots()
 
-ax1.bar(bins[:-1], histMC, width=bin_width, color='green', alpha=0.5, linewidth=None, label='llllaaa')
+ax1.bar(bins[:-1], histMC, width=PtWidth , color='green', alpha=0.5, linewidth=None, label='llllaaa')
 ax1.set_ylabel('Events', color='g')
 ax1.set_xlabel(r'$\beta$', color='black')
 plt.ylim([0,max(histMC)]+0.1*max(histMC))
+plt.xlim([0,max(PtBins)])
+ax1.set_xscale('log')
 #ax1.legend()
 
 ax2 = ax1.twinx()
-ax2.bar(bins[:-1], histL1, width=bin_width, color='blue', alpha=0.5, linewidth=None, label='ss')
+ax2.bar(bins[:-1], histL1, width=PtWidth, color='blue', alpha=0.5, linewidth=None, label='ss')
 plt.ylim([0,max(histMC)]+0.1*max(histMC))
+plt.xlim([0,max(PtBins)])
+ax2.set_xscale('log')
 #ax1.legend()
 
 ax3 = ax2.twinx()
-ax3.plot(np.arange(1,159,bin_width), po, 'o-', color='r', label='Efficiency')
+ax3.plot(PtBins[1:], po, 'o-', color='r', label='Efficiency')
 ax3.set_ylabel('Efficiency', color='r')
+plt.xlim([0,max(PtBins)])
+ax3.set_xscale('log')
 
 #plt.plot(np.arange(0.,0.99,0.01), po, 'go')
 #plt.bar(bins[:-1], histMC, width=0.01, color='green', alpha=0.5)
 #plt.bar(bins[:-1], histL1, width=0.01, color='blue', alpha=0.5)
-#plt.xlim(min(bins), max(bins))
+#plt.xlim(min(PtBins), max(PtBins)+2)
 #plt.ylabel('Probability')
 #plt.xlabel('Probability')
 plt.title(r'Histogram of efficiency versus velocity')

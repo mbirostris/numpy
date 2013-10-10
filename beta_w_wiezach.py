@@ -34,6 +34,7 @@ rec = root2rec(plik+'.root', "tvec")
 
 towers = [0.07, 0.27, 0.44, 0.58, 0.72,0.83,0.93,1.04,1.14,1.24,1.36,1.48,1.61]
 colors = ['b', 'g','r','c','m','y','k','w']
+bin_width=0.01
 
 x=[[],[],[],[],[],[],[],[],[],[],[],[],[]];
 z=[[],[],[],[],[],[],[],[],[],[],[],[],[]];
@@ -47,13 +48,13 @@ for i in xrange(0, len(rec)):
         break;    
 
 for i in xrange(0,7):
-    histMC, bins =  np.histogram(x[i], bins=np.arange(0.,1.,0.01));
-    histL1, bins = np.histogram(z[i], bins=np.arange(0.,1.,0.01));
+    histMC, bins =  np.histogram(x[i], bins=np.arange(0.,1.01,bin_width));
+    histL1, bins = np.histogram(z[i], bins=np.arange(0.,1.01,bin_width));
     po = np.divide(np.array(histL1, dtype=float), np.array(histMC, dtype=float))
     #    plt.figure(i);
-    plt.plot(np.arange(0.,0.99,0.01), po, 'o-', color=colors[i], label = 'Wieza nr. '+str(i))
+    plt.plot(np.arange(0.01,1.01,bin_width), po, 'o-', color=colors[i], label = 'Wieza nr. '+str(i))
 
-plt.xlim([0.3,1.])
+plt.xlim([0.3,1.01])
 plt.ylim([0.,1.05])
 plt.xlabel(r'$\beta$')
 plt.ylabel('Efficiency')

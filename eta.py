@@ -35,8 +35,8 @@ z = np.extract(rec.Tl1, rec.Teta)
 
 bin_width = 0.06;
 
-histMC, bins =  np.histogram(x, bins=np.arange(-3.,3.,bin_width));
-histL1, bins = np.histogram(z, bins=np.arange(-3.,3.,bin_width));
+histMC, bins =  np.histogram(x, bins=np.arange(-3.,3.06,bin_width));
+histL1, bins = np.histogram(z, bins=np.arange(-3.,3.06,bin_width));
 
 
 po = np.divide(np.array(histL1, dtype=float), np.array(histMC, dtype=float))
@@ -54,7 +54,7 @@ ax2.bar(bins[:-1], histL1, width=bin_width, color='blue', alpha=0.5, linewidth=0
 plt.ylim([0,max(histMC)]+0.1*max(histMC))
 
 ax3 = ax2.twinx()
-ax3.plot(np.arange(-3.,2.94,bin_width), po, 'o-', color='r')
+ax3.plot(np.arange(-2.99,3.06,bin_width), po, 'o-', color='r')
 ax3.set_ylabel('Efficiency', color='r')
 
 #plt.xlabel('Smarts')
