@@ -44,49 +44,37 @@ rec = root2rec(plik+'.root', "tvec")
 beta = [0.4, 0.5, 0.6, 0.7, 0.8,0.9,1.]
 colors = ['b', 'g','r','c','m','y','k','w']
 
-x=[[],[],[],[],[],[],[]];
-z=[[],[],[],[],[],[],[]];
+x=[[],[],[],[],[],[]];
+z=[[],[],[],[],[],[]];
 for i in xrange(0, len(rec)):
     for j in xrange(0,7):
-        if (rec.Tbeta[i] > beta[j]):
+        if (rec.Tbeta[i] > beta[j] or rec.Tbeta[i] <= 0.4):
             continue;
-        x[j].append(toTower(rec.Teta[i]));
+        x[j-1].append(toTower(rec.Teta[i]));
         if (rec.Tl1[i]):
-            z[j].append(toTower(rec.Teta[i]))
+            z[j-1].append(toTower(rec.Teta[i]))
         break;    
 
-for i in xrange(0,7):
+
+
+for i in xrange(0,6):
     histMC, bins =  np.histogram(x[i], bins=np.arange(0.,13.,1));
     histL1, bins = np.histogram(z[i], bins=np.arange(0.,13.,1));
     po = np.divide(np.array(histL1, dtype=float), np.array(histMC, dtype=float))
     #    plt.figure(i);
-    plt.plot(np.arange(0.,12.,1), po, '-', color=colors[i])
+    plt.plot(np.arange(0.,12.,1), po, 'o', color=colors[i], label = str(beta[i])+r'<< $\beta$ <<'+str(beta[i+1]))
 
 
-plt.xlabel('Smarts')
-plt.ylabel('Probability')
-plt.title(r'Histogram of IQ: $\mu=100$, $\sigma=15$')
+plt.xlabel(r'Tower')
+plt.ylabel('Efficiency')
+plt.title(r'Histogram of efficiency versus velocity')
+plt.legend(loc=7)
 
 #plt.subplots_adjust(left=0.15)
 
 plt.draw()
 plt.show()
 
-'''
-column_of_values = np.random.randint(10, 99, 10)
-
-# set the bin values:
-bins_ = np.array([0.0, 20.0, 50.0, 75.0])
-
-binned_values = np.digitize(column_of_values, bins_)
-
-print binned_values;
-
-h= np.bincount(binned_values)
-
-plt.plot()
-plt.show();
-'''
 
 del rec, x, z;
 #arr = root2array(plik+'.root', 'Tbeta')

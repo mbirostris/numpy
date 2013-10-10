@@ -18,8 +18,6 @@ try:
 except:
     print "Jedziemyyyy...."
 
-kolor=[1,2,9,2,3,2,8,9,7]
-
 #z reki
 #pliki=["ot001", "ot002", "ot009", "ot019", "ot020" , "nt001"]; 
 
@@ -47,38 +45,24 @@ for i in xrange(0, len(rec)):
         if (rec.Tl1[i]):
             z[j].append(rec.Tbeta[i])
         break;    
-for i in xrange(0,8):
+
+for i in xrange(0,7):
     histMC, bins =  np.histogram(x[i], bins=np.arange(0.,1.,0.01));
     histL1, bins = np.histogram(z[i], bins=np.arange(0.,1.,0.01));
     po = np.divide(np.array(histL1, dtype=float), np.array(histMC, dtype=float))
     #    plt.figure(i);
-    plt.plot(np.arange(0.,0.99,0.01), po, '-', color=colors[i])
+    plt.plot(np.arange(0.,0.99,0.01), po, 'o-', color=colors[i], label = 'Wieza nr. '+str(i))
 
-
-plt.xlabel('Smarts')
-plt.ylabel('Probability')
-plt.title(r'Histogram of IQ: $\mu=100$, $\sigma=15$')
+plt.xlim([0.3,1.])
+plt.ylim([0.,1.05])
+plt.xlabel(r'$\beta$')
+plt.ylabel('Efficiency')
+plt.title(r'Histogram of efficiency versus velocity')
+plt.legend(loc=2);
 
 #plt.subplots_adjust(left=0.15)
 
 plt.draw()
 plt.show()
 
-'''
-column_of_values = np.random.randint(10, 99, 10)
-
-# set the bin values:
-bins_ = np.array([0.0, 20.0, 50.0, 75.0])
-
-binned_values = np.digitize(column_of_values, bins_)
-
-print binned_values;
-
-h= np.bincount(binned_values)
-
-plt.plot()
-plt.show();
-'''
-
 del rec, x, z;
-#arr = root2array(plik+'.root', 'Tbeta')

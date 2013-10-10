@@ -12,13 +12,10 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import host_subplot
 import mpl_toolkits.axisartist as AA
 
-
 try:
     os.mkdir("./rysunki/tree/")
 except:
     print "Jedziemyyyy...."
-
-kolor=[1,2,9,2,3,2,8,9,7]
 
 #z reki
 #pliki=["ot001", "ot002", "ot009", "ot019", "ot020" , "nt001"]; 
@@ -33,71 +30,56 @@ plik=str(sys.argv[1]);
 
 rec = root2rec(plik+'.root', "tvec")
 
-
-
-
+'''
 x=[];z=[];
 for i in xrange(0, len(rec)):
     if (math.fabs(rec.Teta[i]) < 1.61): 
         x.append(rec.Tbeta[i]);
         if (rec.Tl1[i]):
             z.append(rec.Tbeta[i])
+'''
 
+x = np.extract(np.absolute(rec.Teta) < 1.61, rec.Tbeta)
+z = np.extract(rec.Tl1, rec.Tbeta)
 
-histMC, bins =  np.histogram(x, bins=np.arange(0.,1.,0.01));
-histL1, bins = np.histogram(z, bins=np.arange(0.,1.,0.01));
+bin_width = 0.01;
 
+histMC, bins =  np.histogram(x, bins=np.arange(0.,1.,bin_width));
+histL1, bins = np.histogram(z, bins=np.arange(0.,1.,bin_width));
 
 po = np.divide(np.array(histL1, dtype=float), np.array(histMC, dtype=float))
 
-
-
 fig, ax1 = plt.subplots()
-ax1.plot(np.arange(0.,0.99,0.01), po, 'r-', color='r')
-ax1.set_xlabel('time (s)')
-# Make the y-axis label and tick labels match the line color.
-ax1.set_ylabel('Efficiency', color='r')
+
+ax1.bar(bins[:-1], histMC, width=bin_width, color='green', alpha=0.5, linewidth=None, label='llllaaa')
+ax1.set_ylabel('Events', color='g')
+ax1.set_xlabel(r'$\beta$', color='black')
+plt.ylim([0,max(histMC)]+0.1*max(histMC))
+#ax1.legend()
 
 ax2 = ax1.twinx()
-ax2.bar(bins[:-1], histMC, width=0.01, color='green', alpha=0.5)
+ax2.bar(bins[:-1], histL1, width=bin_width, color='blue', alpha=0.5, linewidth=None, label='ss')
+plt.ylim([0,max(histMC)]+0.1*max(histMC))
+#ax1.legend()
 
-
-ax3 = ax1.twinx()
-ax3.bar(bins[:-1], histL1, width=0.01, color='blue', alpha=0.5)
-ax3.set_ylabel('Events', color='g')
-
-
+ax3 = ax2.twinx()
+ax3.plot(np.arange(0.,0.99,bin_width), po, 'o-', color='r', label='Efficiency')
+ax3.set_ylabel('Efficiency', color='r')
 
 #plt.plot(np.arange(0.,0.99,0.01), po, 'go')
 #plt.bar(bins[:-1], histMC, width=0.01, color='green', alpha=0.5)
 #plt.bar(bins[:-1], histL1, width=0.01, color='blue', alpha=0.5)
 #plt.xlim(min(bins), max(bins))
-
-
-#plt.xlabel('Smarts')
 #plt.ylabel('Probability')
-#plt.title(r'Histogram of IQ: $\mu=100$, $\sigma=15$')
-
+#plt.xlabel('Probability')
+plt.title(r'Histogram of efficiency versus velocity')
 #plt.subplots_adjust(left=0.15)
 
 plt.draw()
 plt.show()
 
+del rec, x, z, po, ax1, ax2, ax3, bins, histMC, histL1;
 '''
-column_of_values = np.random.randint(10, 99, 10)
-
-# set the bin values:
-bins_ = np.array([0.0, 20.0, 50.0, 75.0])
-
 binned_values = np.digitize(column_of_values, bins_)
-
-print binned_values;
-
 h= np.bincount(binned_values)
-
-plt.plot()
-plt.show();
 '''
-
-del rec, x, z;
-#arr = root2array(plik+'.root', 'Tbeta')

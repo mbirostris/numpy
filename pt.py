@@ -30,40 +30,47 @@ plik=str(sys.argv[1]);
 
 rec = root2rec(plik+'.root', "tvec")
 
-x = rec.Teta
-z = np.extract(rec.Tl1, rec.Teta)
+x = np.extract(np.absolute(rec.Teta) < 1.61, rec.Tpt)
+z = np.extract(rec.Tl1, rec.Tpt)
 
-bin_width = 0.06;
+bin_width = 2;
 
-histMC, bins =  np.histogram(x, bins=np.arange(-3.,3.,bin_width));
-histL1, bins = np.histogram(z, bins=np.arange(-3.,3.,bin_width));
-
+histMC, bins =  np.histogram(x, bins=np.arange(1,160,bin_width));
+histL1, bins = np.histogram(z, bins=np.arange(1,160,bin_width));
 
 po = np.divide(np.array(histL1, dtype=float), np.array(histMC, dtype=float))
 
 fig, ax1 = plt.subplots()
 
-ax1.bar(bins[:-1], histMC, width=bin_width, color='green', alpha=0.5, linewidth=0)
+ax1.bar(bins[:-1], histMC, width=bin_width, color='green', alpha=0.5, linewidth=None, label='llllaaa')
 ax1.set_ylabel('Events', color='g')
-ax1.set_xlabel(r'$\eta$')
+ax1.set_xlabel(r'$\beta$', color='black')
 plt.ylim([0,max(histMC)]+0.1*max(histMC))
-
+#ax1.legend()
 
 ax2 = ax1.twinx()
-ax2.bar(bins[:-1], histL1, width=bin_width, color='blue', alpha=0.5, linewidth=0)
+ax2.bar(bins[:-1], histL1, width=bin_width, color='blue', alpha=0.5, linewidth=None, label='ss')
 plt.ylim([0,max(histMC)]+0.1*max(histMC))
+#ax1.legend()
 
 ax3 = ax2.twinx()
-ax3.plot(np.arange(-3.,2.94,bin_width), po, 'o-', color='r')
+ax3.plot(np.arange(1,159,bin_width), po, 'o-', color='r', label='Efficiency')
 ax3.set_ylabel('Efficiency', color='r')
 
-#plt.xlabel('Smarts')
+#plt.plot(np.arange(0.,0.99,0.01), po, 'go')
+#plt.bar(bins[:-1], histMC, width=0.01, color='green', alpha=0.5)
+#plt.bar(bins[:-1], histL1, width=0.01, color='blue', alpha=0.5)
+#plt.xlim(min(bins), max(bins))
 #plt.ylabel('Probability')
-plt.title(r'Histogram of efficiency versus pseudorapidity')
-
+#plt.xlabel('Probability')
+plt.title(r'Histogram of efficiency versus velocity')
 #plt.subplots_adjust(left=0.15)
 
 plt.draw()
 plt.show()
 
-del rec, x, z;
+del rec, x, z, po, ax1, ax2, ax3, bins, histMC, histL1;
+'''
+binned_values = np.digitize(column_of_values, bins_)
+h= np.bincount(binned_values)
+'''
