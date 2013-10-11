@@ -44,18 +44,15 @@ po = np.divide(np.array(histL1, dtype=float), np.array(histMC, dtype=float))
 fig, ax1 = plt.subplots()
 
 ax1.bar(bins[:-1], histMC, width=bin_width, color='green', alpha=0.5, linewidth=0)
+ax1.bar(bins[:-1], histL1, width=bin_width, color='blue', alpha=0.5, linewidth=0)
 ax1.set_ylabel('Events', color='g')
 ax1.set_xlabel(r'$\eta$')
 plt.ylim([0,max(histMC)]+0.1*max(histMC))
 
 
 ax2 = ax1.twinx()
-ax2.bar(bins[:-1], histL1, width=bin_width, color='blue', alpha=0.5, linewidth=0)
-plt.ylim([0,max(histMC)]+0.1*max(histMC))
-
-ax3 = ax2.twinx()
-ax3.plot(np.arange(-2.99,3.06,bin_width), po, 'o-', color='r')
-ax3.set_ylabel('Efficiency', color='r')
+ax2.plot(np.arange(-2.99,3.06,bin_width), po, 'o-', color='r')
+ax2.set_ylabel('Efficiency', color='r')
 
 #plt.xlabel('Smarts')
 #plt.ylabel('Probability')
