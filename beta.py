@@ -45,8 +45,8 @@ z = np.extract(rec.Tl1, rec.Tbeta)
 
 bin_width = 0.01;
 
-histMC, bins =  np.histogram(x, bins=np.arange(-0.01,1.0,bin_width));
-histL1, bins = np.histogram(z, bins=np.arange(-0.01,1.0,bin_width));
+histMC, bins =  np.histogram(x, bins=np.arange(0.,1.01,bin_width));
+histL1, bins = np.histogram(z, bins=np.arange(0.,1.01,bin_width));
 
 po = np.divide(np.array(histL1, dtype=float), np.array(histMC, dtype=float))
 
@@ -61,7 +61,7 @@ ax1.set_xlabel(r'$\beta$', color='black')
 #ax1.legend()
 
 ax2 = ax1.twinx()
-ax2.plot(np.arange(0.,1.,bin_width), po, 'o-', color='r', label='Efficiency')
+ax2.plot(np.arange(0.01,1.01,bin_width), po, 'o-', color='r', label='Efficiency')
 ax2.set_ylabel('Efficiency', color='r')
 plt.xlim([0.,1.01])
 
