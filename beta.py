@@ -1,9 +1,9 @@
+import sys 
 import ROOT#gROOT, TCanvas, TF1, TFile
 from root_numpy import root2array, root2rec, tree2rec
 import os
 import shutil
 import math
-import sys
 from ROOT import * #gROOT, TCanvas, TF1, TFile
 import pylab as pl
 import numpy as np
