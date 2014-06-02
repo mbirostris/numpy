@@ -36,7 +36,7 @@ plik=str(sys.argv[1]);
 rec = root2rec(plik+'.root', "tvec")
 
 x = np.extract(np.absolute(rec.Teta) < 1.61, rec.Tpt)
-z = np.extract(rec.Tl1, rec.Tpt)
+z = np.extract(rec.Tlbx0, rec.Tpt)
 
 bin_width = 2;
 

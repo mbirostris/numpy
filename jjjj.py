@@ -41,33 +41,29 @@ for i in xrange(0, len(rec)):
 '''
 
 x = np.extract(np.absolute(rec.Teta) < 1.61, rec.Tbeta)
-z = np.extract(rec.Tlbx0, rec.Tbeta)
+z = np.extract(rec.Tl1, rec.Tbeta)
 
 
 bin_width = 0.01;
 
-histMC, bins =  np.histogram(x, bins=np.arange(0.,1.01,bin_width));
-histL1, bins = np.histogram(z, bins=np.arange(0.,1.01,bin_width));
+histMC, bins =  np.histogram(x, bins=np.arange(0.,1.01,bin_width), normed=1);
 
 
 
 
-po = np.divide(np.array(histL1, dtype=float), np.array(histMC, dtype=float))
 
 
-fig, ax1 = plt.subplots()
+plt.bar(bins[:-1], histMC, width=bin_width, color='green', alpha=0.5, linewidth=None, label='MC')
 
-leg1 = ax1.bar(bins[:-1], histMC, width=bin_width, color='green', alpha=0.5, linewidth=None, label='MC')
-leg2 = ax1.bar(bins[:-1], histL1, width=bin_width, color='blue', alpha=0.5, linewidth=None, label='L1 Trigger') #bottom=histMC - robi stacka
-ax1.set_ylabel('Events', color='g')
-ax1.set_xlabel(r'$\beta$', color='black')
+plt.ylabel('Events', color='g')
+plt.xlabel(r'$\beta$', color='black')
 #ax1.set_ylim([0,max(histMC)]+0.1*max(histMC))
 #ax1.set_xlim([0.,1.01])
 #ax1.legend()
 
-ax2 = ax1.twinx()
-leg3  = ax2.plot(np.arange(0.01,1.01,bin_width), po, '^-', color='c', label='Efficiency')
-ax2.set_ylabel('Efficiency', color='r')
+#ax2 = ax1.twinx()
+#leg3  = ax2.plot(np.arange(0.01,1.01,bin_width), po, '^-', color='c', label='Efficiency')
+#ax2.set_ylabel('Efficiency', color='r')
 plt.xlim([0.,1.01])
 
 #plt.plot(np.arange(0.,0.99,0.01), po, 'go')
@@ -76,12 +72,12 @@ plt.xlim([0.,1.01])
 #plt.xlim([0.,1.01])
 #plt.ylabel('Probability')
 #plt.xlabel('Probability')
-plt.title(r'Histogram of efficiency versus velocity')
+plt.title(r'Muons velocity distribution')
 #plt.subplots_adjust(left=0.15)
 #ax2.legend(loc=2)
 #ax1.legend(loc=6)
 
-plt.legend( (leg3[0], leg1, leg2), ('Efficiency', 'MC', 'L1 Trigger'), loc = 2 ) 
+#plt.legend( (leg3[0], leg1, leg2), ('Efficiency', 'MC', 'L1 Trigger'), loc = 2 ) 
 
 plt.draw()
 plt.show()
