@@ -12,6 +12,9 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import host_subplot
 import mpl_toolkits.axisartist as AA
 from matplotlib import gridspec
+from matplotlib.backends.backend_pdf import PdfPages
+
+
 #plik=str(sys.argv[1]);
 #plik2=str(sys.argv[2]);
 
@@ -27,7 +30,7 @@ variable = 'diTauNSVfitMass'
 #bins=[0., 20., 40., 60., 80., 100., 120., 140., 160., 180., 200., 250., 300., 350. ];
 #bins=[0., 10.,  20., 30.,  40., 50.,  60., 70., 80.,90.,  100.,110., 120.,130., 140.,150., 160.,170., 180.,190., 200.,225., 250.,275., 300., 350. ];
 
-bin_width = 6; bin_min = 0; bin_max = 360;
+bin_width = 6.0; bin_min = 0; bin_max = 360;
 bins=np.arange(bin_min,bin_max,bin_width) 
 bincount = (bin_max - bin_min)/bin_width;
 #bin_width=[(bins[j+1]-bins[j]) for j in range(len(bins)-1)]
@@ -42,8 +45,6 @@ for i in range(0, len(pliki)):
         continue;
     pqcd.append("QCD_" + pliki[i]);
 
-print pqcd;
-#pqcd=["QCD_DY->ll,j->t","QCD_TTbar","QCD_WJets", "QCD_Others"]
 weighttableqcd=[19.712, 18.9235, 22.3695, 19.712, 19.712,19.712,19.712,19.712,19.712]
 
 hqcd = []; hqcdw = [];
@@ -80,9 +81,13 @@ for i in range(0,len(MChist)):
 
 
 #rysowanie
-fig = plt.figure(figsize=(8, 6)) 
-gs = gridspec.GridSpec(8, 1) 
-ax1 = plt.subplot(gs[0:6, :])
+fig = plt.figure(figsize=(16, 16)) 
+gs = gridspec.GridSpec(16, 1) 
+ax1 = plt.subplot(gs[0:12, :])
+
+font = {'size'   : 28}
+plt.rc('font', **font)
+
 
 legenda=[r'$t\bar{t}$', "QCD" , 'EW', 'EW', 'EW', 'EW', r'$Z\to\mu\mu$', r'$Z\to\mu\mu$' , '', r'$Z\to\tau\tau$',  r'$Z\to\tau\tau$' ]
 kolor=["#7575FF","#FF80FF",   "#7A0000",  "#7A0000", "#7A0000","#7A0000" ,"blue", "blue","black" ,"#FFD476", "#FFD476"]
@@ -92,12 +97,12 @@ plt.stackplot(X, Ymc[0], Yqcd, Ymc[1::1], colors=kolor, label='a') #plt.plot tez
 counts, bins = np.histogram(root2rec('Data'+'.root', variable)[variable], bins)
 Ydata = np.array([counts,counts]).T.flatten()
 dataERROR = np.sqrt(counts);
-plt.plot(bins[:-1] + bin_width2 , counts, 'bo', markersize=6 ,color='black', label='Observed', linestyle='None')
+plt.plot(bins[:-1] + bin_width2 , counts, 'bo', markersize=16 ,color='black', label='Observed', linestyle='None')
 #plt.errorbar( bins[:-1] + (bin_width+0.)/2, counts,yerr=dataERROR, fmt=None,color='black')
 
 #legend
 handles, labels = plt.gca().get_legend_handles_labels()
-print handles, labels
+#print handles, labels
 #plt.legend([handles[0], handles[9], handles[7], handles[3], handles[2], handles[1] ], [labels[0], labels[9], labels[7], labels[3], labels[2], labels[1]])
 leg = plt.legend([handles[0],
     plt.Rectangle((0, 0), 1, 1, fc=kolor[9]), 
@@ -105,7 +110,7 @@ leg = plt.legend([handles[0],
     plt.Rectangle((0, 0), 1, 1, fc=kolor[3]),
     plt.Rectangle((0, 0), 1, 1, fc=kolor[1]),
     plt.Rectangle((0, 0), 1, 1, fc=kolor[0])], 
-    [labels[0],legenda[9], legenda[6], legenda[3], legenda[1], legenda[0]], numpoints=1 ) #, prop={'size':28})  #numpoints robi tylko jedna kropke w danych zamiast dwuch
+    [labels[0],legenda[9], legenda[6], legenda[3], legenda[1], legenda[0]], numpoints=1, prop={'size':28})  #numpoints robi tylko jedna kropke w danych zamiast dwuch
 leg.draw_frame(False)
 
 #plt.grid(True,which="both",ls="-", color='red') #grid
@@ -114,17 +119,20 @@ ax1.set_xlabel(variable + ' (GeV)')
 ax1.set_ylabel('Events/(' + str(bin_width) +' GeV)')
 
 #data do MC
-ax2  = plt.subplot(gs[7, :])
+ax2  = plt.subplot(gs[14:, :])
 
 po = np.divide(np.array(counts-histsum, dtype=float), np.array(histsum, dtype=float))
-plt.plot(bins[:-1] + bin_width2, po, 'o', color='black', label='Efficiency')
+plt.plot(bins[:-1] + bin_width2, po, 'o', color='black', label='Efficiency', markersize=12)
 plt.axhline(y=0, linestyle='-', color='red', linewidth=2, zorder=2)
 ax2.set_ylabel(r'$\frac{{DATA - MC}}{MC}$')
 plt.ylim([-3.5,3.5])
 plt.xlim([bin_min,bin_max])
 
-
-plt.draw()
-plt.show()
+pp = PdfPages('multipage.pdf')
+pp.savefig(fig)
+pp.close()
+#plt.draw()
+#plt.show()
+plt.close()
 
 
